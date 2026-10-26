@@ -13,6 +13,16 @@ RS.units.push({
       key: '`tibble(열이름 = 값들, 열이름 = 값들, …)` — 열 하나씩 벡터로 준다. 모든 열의 길이가 같아야 한다.',
       setup: [],
       body: [
+        '**tibble**은 tidyverse가 쓰는 **표**예요. 행 하나는 관측 하나(새 한 마리), 열 하나는 변수 하나(bird, color …)예요. 지금까지 본 mpg·diamonds도, `read_csv()`로 읽은 sibimit도 모두 tibble이에요. R에 원래 있던 표(data.frame)를 다듬은 것이라, 출력하면 앞 10행만 보여 주고 열마다 종류(`<chr>`, `<dbl>`)를 붙여 줘요. `tibble()`은 이런 표를 **손으로 직접 만드는** 함수예요.',
+        '**dplyr**(디플라이어)는 tibble을 다루는 함수를 모은 **패키지**예요. 이름은 데이터(d)와 펜치(pliers)를 합친 말이에요. `library(tidyverse)`를 하면 ggplot2와 함께 불러와져요. 함수마다 하는 일이 하나씩이고, 모두 **첫 인자로 데이터를 받아 새 tibble을 돌려줘요.** 앞으로 배울 것은 이래요:',
+        { table: { head: ['함수', '하는 일', '단원'], rows: [
+          ['`select()`', '열(세로) 고르기', 'N단원 (이 단원)'],
+          ['`filter()`', '조건에 맞는 행(가로) 고르기', 'O단원'],
+          ['`%>%`', '앞 결과를 다음 함수의 첫 인자로 넘기기 (파이프, dplyr과 함께 쓰는 기호)', 'P단원'],
+          ['`mutate()`', '새 열 만들기', 'Q단원'],
+          ['`group_by()` + `summarise()`', '묶음별로 요약하기 (평균 등)', 'R단원'],
+        ] } },
+        '이 레슨에서는 먼저 연습용 표 birds를 `tibble()`로 만들어요.',
         { code: `birds <- tibble(bird = rep(c("owl", "crow", "oriole"), ## owl (올빼미), crow (까마귀), oriole (꾀꼬리)
                                 times =  c(3,3,2)),
                 color = rep(c("orange","black","black"),
