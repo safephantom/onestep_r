@@ -20,7 +20,7 @@ RS.units.push({
       ],
       quiz: [
         { type: 'mcq', q: '범례(legend)는 왜 생겼을까요?', opts: [
-          { t: 'color를 aes() **안**에서 열(class)에 매핑했기 때문', ok: true, why: '매핑 = 데이터 값과 색의 대응표가 필요 → 범례.' },
+          { t: 'color를 aes() 안에서 열(class)에 매핑했기 때문', ok: true, why: '매핑 = 데이터 값과 색의 대응표가 필요 → 범례.' },
           { t: 'geom_point는 항상 범례를 그린다', why: '매핑이 없으면 범례도 없어요.' },
           { t: 'class가 7개라서', why: '개수와 관계없이 매핑하면 생겨요.' },
         ] },

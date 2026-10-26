@@ -133,7 +133,7 @@ RS.units.push({
       ],
       quiz: [
         { type: 'mcq', q: '범례가 하나로 합쳐진 이유는?', opts: [
-          { t: '두 aes가 **같은 변수**(drv)에 매핑되어 제목과 값이 같아서', ok: true, why: 'ggplot이 자동으로 합쳐요.' },
+          { t: '두 aes가 같은 변수(drv)에 매핑되어 제목과 값이 같아서', ok: true, why: 'ggplot이 자동으로 합쳐요.' },
           { t: 'geom_smooth는 범례를 하나만 만들 수 있어서', why: '다른 변수면 두 개 생겨요.' },
         ] },
         { type: 'write', q: 'ExerciseKey 22–24행 형태: 점과 **띠 없는** 추세선 모두 drv별 색이 되게 그리세요 (점 크기 3).', target: `ggplot(data= mpg, mapping = aes(x=displ, y=hwy)) +

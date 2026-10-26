@@ -99,7 +99,7 @@ glimpse(neutralization)`, setup: [] },
           { t: 'NA를 없애려고', why: 'NA는 filter 줄이 빼요.' },
         ] },
         { type: 'mcq', q: '`filter(!is.na(prosodic_boundary))`가 남기는 행은?', opts: [
-          { t: 'prosodic_boundary 값이 **있는** 행', ok: true, why: '`!` = NOT. NA가 아닌 행만.' },
+          { t: 'prosodic_boundary 값이 있는 행', ok: true, why: '`!` = NOT. NA가 아닌 행만.' },
           { t: 'prosodic_boundary가 NA인 행', why: '`!`가 앞에 있어서 반대예요.' },
           { t: 'prosodic_boundary가 yes인 행', why: 'yes/no 둘 다 남아요.' },
         ] },
@@ -280,7 +280,7 @@ summary(mlr_mod_3)`, run: false, cap: '56–59행. 이 시점에 voicing은 이�
       quiz: [
         { type: 'fill', q: 'voiced + 경계 있음 칸의 평균', code: '144.566 + 20.090 + 5.686 + ▢ = 183.314', ans: [['12.972']], why: '두 조건 모두 기준이 아닌 칸에는 상호작용 항까지 더해요.' },
         { type: 'mcq', q: '이 모델에서 `voicingvoiced` 5.686은?', opts: [
-          { t: '경계가 **없을 때**의 voiced − voiceless', ok: true, why: '상대 변수(prosodic_boundary)가 기준(no)일 때의 효과.' },
+          { t: '경계가 없을 때의 voiced − voiceless', ok: true, why: '상대 변수(prosodic_boundary)가 기준(no)일 때의 효과.' },
           { t: '전체 데이터에서의 voiced − voiceless', why: '그건 slr_mod_2의 +9.032예요.' },
           { t: '경계가 있을 때의 voiced − voiceless', why: '그건 5.686 + 12.972 = 18.658.' },
         ] },

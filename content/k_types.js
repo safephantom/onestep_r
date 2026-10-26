@@ -79,7 +79,7 @@ RS.units.push({
       ],
       quiz: [
         { type: 'mcq', q: '이 그림에서 점을 바이올린 **뒤에** 가려지지 않게 하는 요소는?', opts: [
-          { t: 'geom_point가 geom_violin보다 **나중에** 적혀 있다', ok: true, why: '나중 층이 위에 그려져요.' },
+          { t: 'geom_point가 geom_violin보다 나중에 적혀 있다', ok: true, why: '나중 층이 위에 그려져요.' },
           { t: 'alpha = 0.5', why: 'alpha는 바이올린을 흐리게 할 뿐이에요.' },
           { t: 'position = "jitter"', why: '흔들기는 점끼리의 겹침 문제예요.' },
         ] },
@@ -125,7 +125,7 @@ RS.units.push({
       ],
       quiz: [
         { type: 'mcq', q: 'Practice 1에서 박스 속이 class 색이 아니라 흰색인 이유는?', opts: [
-          { t: 'geom_boxplot에 `fill = "white"`를 **설정**해서 전역 fill 매핑보다 우선했기 때문', ok: true, why: '층에서 준 고정값이 이겨요.' },
+          { t: 'geom_boxplot에 `fill = "white"`를 설정해서 전역 fill 매핑보다 우선했기 때문', ok: true, why: '층에서 준 고정값이 이겨요.' },
           { t: 'alpha = 0.5라서', why: '투명도는 색을 바꾸지 않아요.' },
           { t: '박스플롯은 fill을 못 받아서', why: '받아요 (왼쪽 그림).' },
         ] },
