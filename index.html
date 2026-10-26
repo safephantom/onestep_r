@@ -151,7 +151,7 @@ body.play-open .layout { grid-template-columns: var(--side-w) minmax(0, 1fr) var
   background: var(--surface); color: var(--ink); font: inherit; font-size: 14px;
 }
 .search-inp:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
-.side.searching .side-unit { display: none; }
+.side.searching .side-unit, .side.searching .side-cat, .side.searching .side-note, .side.searching .side-prac { display: none; }
 .search-res { display: grid; gap: 2px; }
 .sr-n { font-size: 12.5px; color: var(--ink-3); padding: 0 4px 6px; }
 .sr-item { display: grid; gap: 2px; padding: 7px 8px; border-radius: 8px; text-decoration: none; color: var(--ink); }
@@ -254,6 +254,28 @@ img.plot, canvas.plot {
 .o-view th, .o-view td { padding: 3px 10px; border-bottom: 1px solid var(--line-2); text-align: left; white-space: nowrap; }
 .o-view th { position: sticky; top: 0; background: var(--surface); font-weight: 600; }
 .o-view .rn { color: var(--ink-3); text-align: right; }
+
+/* 카테고리 (기본 · wk · 실습) */
+.side-cat { margin: 16px 4px 2px; font: 600 11px/1.3 var(--f-mono); letter-spacing: .07em; color: var(--accent); }
+.side-cat:first-of-type { margin-top: 6px; }
+.side-cat.prac { padding-top: 10px; border-top: 2px solid var(--line); }
+.side-note { padding: 2px 4px 6px 30px; font-size: 12.5px; color: var(--ink-3); }
+.side-prac { display: flex; flex-wrap: wrap; gap: 4px 6px; padding: 6px 4px 10px 30px; border-bottom: 1px solid var(--line-2); }
+.side-prac .sp-k { width: 100%; }
+.sp-k { font: 600 10.5px var(--f-mono); letter-spacing: .06em; color: var(--ink-3); }
+.sp-a { font-size: 12px; line-height: 1.35; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); text-decoration: none; }
+.sp-a:hover { border-color: var(--accent); color: var(--ink); }
+.sp-a.s-done, .prac-chip.s-done { border-color: color-mix(in srgb, var(--ok) 55%, var(--line)); color: var(--ok); }
+.sp-a.s-doing, .prac-chip.s-doing { border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); }
+.cat-h { font: 600 13px/1.3 var(--f-mono); letter-spacing: .06em; color: var(--accent); margin: 16px 0 2px; }
+.cat-h.prac { margin-top: 26px; padding-top: 14px; border-top: 2px solid var(--line); }
+.cat-note { margin: 0 0 4px; }
+.cat-note p { margin: 0; }
+.prac-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 2px 0 4px; }
+.prac-chip { font-size: 13px; line-height: 1.35; padding: 4px 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); text-decoration: none; }
+.prac-chip:hover { border-color: var(--accent); }
+.prac-box { margin-top: 30px; }
+.prac-box .prac-row { margin-top: 8px; }
 
 /* 출력 해부 (anno) */
 .anno { margin: 0 0 24px; }
@@ -537,6 +559,9 @@ a.stat:hover { border-color: var(--accent); }
 <script src="content/zb_mlr.js"></script>
 <script src="content/zc_neut.js"></script>
 <script src="content/zd_review.js"></script>
+<script src="content/p_wk5.js"></script>
+<script src="content/p_wk7.js"></script>
+<script src="content/_cats.js"></script>
 <script src="js/outputs.js"></script>
 <script src="js/datasets.js"></script>
 <script src="js/runtime-r.js"></script>

@@ -202,6 +202,23 @@
     const done = u.lessons.filter((l) => lessonStatus(l) === 'done').length;
     return { done, total: u.lessons.length };
   }
+  // ---------------------------------------------------------------- 카테고리 (content/_cats.js)
+  const CATS = RS.cats || [{ id: 'all', title: '단원', units: RS.units.map((u) => u.id) }];
+  const unitById = (id) => RS.units.find((u) => u.id === id);
+  const catOf = (u) => CATS.find((c) => c.id === u.cat) || null;
+  const unitStatus = (u) => { const st = unitStats(u); return st.done === st.total ? 'done' : (st.done || u.lessons.some((l) => lessonStatus(l) !== 'todo')) ? 'doing' : 'todo'; };
+  function practiceLinks(cat) {
+    return (cat.practice || []).map((p) => {
+      if (p.lesson) {
+        const l = BY_ID[p.lesson];
+        const g = (RS.goals || []).find((x) => x.lesson === p.lesson);
+        return l && { href: '#/l/' + l.id, title: g ? g.title : l.title, status: lessonStatus(l), lesson: l.id };
+      }
+      const u = unitById(p.unit);
+      return u && { href: '#/u/' + u.id, title: u.title, status: unitStatus(u), unit: u.id };
+    }).filter(Boolean);
+  }
+  const pracChip = (p, cls) => h('a', { class: (cls || 'prac-chip') + ' s-' + p.status, href: p.href, 'data-plesson': p.lesson || null, 'data-punit': p.unit || null }, p.title);
   function recordAnswer(q, ok) {
     const s = P.quiz[q.id] || { ok: false, first: null, n: 0 };
     s.n += 1;
@@ -749,6 +766,21 @@
     }
     const prev = LESSONS[l.n - 1];
     const next = LESSONS[l.n + 1];
+    const cat = catOf(l.unit);
+    if (cat && !cat.practiceCat && (!next || next.unit.cat !== l.unit.cat)) {
+      let pl = practiceLinks(cat);
+      // 레슨 없이 실습만 있는 다음 주(wk6)는 이어서 보여 준다
+      for (let k = CATS.indexOf(cat) + 1; k < CATS.length && !CATS[k].units.length && !CATS[k].practiceCat; k++) {
+        const wk = CATS[k].title.split(' · ')[0];
+        pl = pl.concat(practiceLinks(CATS[k]).map((p) => Object.assign({}, p, { title: (p.title.startsWith(wk) ? '' : wk + ' ') + p.title })));
+      }
+      if (pl.length) {
+        art.appendChild(h('aside', { class: 'note n-src prac-box' },
+          h('div', { class: 'note-t' }, '이번 주 실습'),
+          mdEl('**' + cat.title + '**의 마지막 레슨이에요. 실습으로 가서 직접 풀어 보세요. (실습은 왼쪽 목차 맨 아래 "실습"에도 모여 있어요.)'),
+          h('div', { class: 'prac-row' }, pl.map((p) => pracChip(p)))));
+      }
+    }
     art.appendChild(h('nav', { class: 'pager' },
       prev ? h('a', { class: 'pg prev', href: '#/l/' + prev.id }, h('small', null, '이전'), h('span', null, prev.title)) : h('span'),
       next ? h('a', { class: 'pg next', href: '#/l/' + next.id }, h('small', null, next.ui !== l.ui ? '다음 단원' : '다음'), h('span', null, next.title)) : h('a', { class: 'pg next', href: '#/' }, h('small', null, '끝'), h('span', null, '처음 화면으로'))));
@@ -767,7 +799,7 @@
     main.innerHTML = '';
     const st = unitStats(u);
     const art = h('article', { class: 'lesson unit-page' },
-      h('div', { class: 'crumb' }, h('a', { href: '#/' }, '처음'), h('span', null, ' · ' + unitNo(u.id) + '단원')),
+      h('div', { class: 'crumb' }, h('a', { href: '#/' }, '처음'), h('span', null, ' · ' + (catOf(u) ? catOf(u).title + ' · ' : '') + unitNo(u.id) + '단원')),
       h('h1', { class: 'l-title' }, u.title),
       u.desc ? mdEl(u.desc, 'lead') : null,
       h('div', { class: 'unit-meter' }, bar(st.done, st.total), h('span', null, st.done + ' / ' + st.total + ' 레슨 완료')));
@@ -803,7 +835,7 @@
     art.appendChild(h('header', { class: 'hero' },
       h('div', { class: 'hero-k' }, '양적 언어자료 분석 · wk2–8 (중간고사 범위)'),
       h('h1', null, '한 층씩 R'),
-      mdEl('ggplot 그림이 `+`로 **한 층씩** 쌓이듯, wk2–8 스크립트에 나온 것만 **한 조각씩** 짚어요. 각 조각마다 설명 → 실제 R 결과 → 퀴즈. 수업의 Practice와 숙제(HW1)는 직접 풀어서 채점받고, wk7–8은 **회귀 결과 표를 해석**하는 연습까지 해요.', 'lead'),
+      mdEl('ggplot 그림이 `+`로 **한 층씩** 쌓이듯, wk2–8 스크립트에 나온 것만 **한 조각씩** 짚어요. 각 조각마다 설명 → 실제 R 결과 → 퀴즈. 단원은 **주(wk)별**로 묶었고, 직접 풀어 채점받는 Practice·연습·숙제(HW1)는 맨 아래 **실습**에 모았어요. wk7–8은 코드를 쓰기보다 **회귀 결과 표를 읽고 해석**하는 데 집중해요.', 'lead'),
       h('div', { class: 'hero-stats' },
         stat(doneL + ' / ' + LESSONS.length, '레슨 완료'),
         stat(okQ + ' / ' + totalQ, '퀴즈 맞힘'),
@@ -832,12 +864,20 @@
 
     // 단원 목록
     const us = h('section', { class: 'units' }, h('h2', null, '단원'));
-    RS.units.forEach((u, i) => {
-      const st = unitStats(u);
-      us.appendChild(h('a', { class: 'unit-card', href: '#/u/' + u.id },
-        h('span', { class: 'uc-n' }, String(i + 1).padStart(2, '0')),
-        h('span', { class: 'uc-body' }, h('span', { class: 'uc-t' }, u.title), u.short ? h('span', { class: 'uc-d' }, u.short) : null),
-        h('span', { class: 'uc-p' }, bar(st.done, st.total), h('small', null, st.done + '/' + st.total))));
+    CATS.forEach((c) => {
+      us.appendChild(h('h3', { class: 'cat-h' + (c.practiceCat ? ' prac' : '') }, c.title));
+      if (c.note) us.appendChild(mdEl(c.note, 'muted cat-note'));
+      c.units.forEach((uid) => {
+        const u = unitById(uid);
+        if (!u) return;
+        const st = unitStats(u);
+        us.appendChild(h('a', { class: 'unit-card', href: '#/u/' + u.id },
+          h('span', { class: 'uc-n' }, String(RS.units.indexOf(u) + 1).padStart(2, '0')),
+          h('span', { class: 'uc-body' }, h('span', { class: 'uc-t' }, u.title), u.short ? h('span', { class: 'uc-d' }, u.short) : null),
+          h('span', { class: 'uc-p' }, bar(st.done, st.total), h('small', null, st.done + '/' + st.total))));
+      });
+      const pl = c.practiceCat ? [] : practiceLinks(c);
+      if (pl.length) us.appendChild(h('div', { class: 'prac-row' }, h('span', { class: 'sp-k' }, '이 주의 실습'), pl.map((p) => pracChip(p))));
     });
     art.appendChild(us);
 
@@ -1048,17 +1088,27 @@
     });
     side.appendChild(h('div', { class: 'search' }, inp));
     side.appendChild(h('div', { class: 'search-res', id: 'searchRes' }));
-    RS.units.forEach((u, i) => {
-      const st = unitStats(u);
-      const det = h('details', { class: 'side-unit', 'data-unit': u.id },
-        h('summary', null,
-          h('span', { class: 'su-n' }, String(i + 1).padStart(2, '0')),
-          h('span', { class: 'su-t' }, u.title),
-          h('span', { class: 'su-c' }, st.done + '/' + st.total)),
-        h('ol', null, u.lessons.map((l) => h('li', null, h('a', { href: '#/l/' + l.id, 'data-lesson': l.id, class: 's-' + lessonStatus(l) }, h('span', { class: 'sd' }), h('span', null, l.title))))));
-      side.appendChild(det);
+    CATS.forEach((c) => {
+      side.appendChild(h('div', { class: 'side-cat' + (c.practiceCat ? ' prac' : '') }, c.title));
+      if (c.note && !c.units.length) side.appendChild(h('div', { class: 'side-note' }, c.note));
+      c.units.forEach((uid) => {
+        const u = unitById(uid);
+        if (u) sideUnit(side, u, RS.units.indexOf(u));
+      });
+      const pl = c.practiceCat ? [] : practiceLinks(c);
+      if (pl.length) side.appendChild(h('div', { class: 'side-prac' }, h('span', { class: 'sp-k' }, '이 주의 실습'), pl.map((p) => pracChip(p, 'sp-a'))));
     });
     renderSearch();
+  }
+  function sideUnit(side, u, i) {
+    const st = unitStats(u);
+    const det = h('details', { class: 'side-unit', 'data-unit': u.id },
+      h('summary', null,
+        h('span', { class: 'su-n' }, String(i + 1).padStart(2, '0')),
+        h('span', { class: 'su-t' }, u.title),
+        h('span', { class: 'su-c' }, st.done + '/' + st.total)),
+      h('ol', null, u.lessons.map((l) => h('li', null, h('a', { href: '#/l/' + l.id, 'data-lesson': l.id, class: 's-' + lessonStatus(l) }, h('span', { class: 'sd' }), h('span', null, l.title))))));
+    side.appendChild(det);
   }
   function refreshChrome(unitId) {
     const cur = (location.hash.match(/^#\/l\/(.+)$/) || [])[1];
@@ -1074,6 +1124,10 @@
       if ((curL && curL.unit === u) || unitId === u.id) {
         if (!d.open) d.open = true;
       }
+    });
+    $$('#side .side-prac a').forEach((a) => {
+      const st = a.dataset.plesson ? lessonStatus(BY_ID[a.dataset.plesson]) : unitStatus(unitById(a.dataset.punit));
+      a.className = 'sp-a s-' + st;
     });
     const act = $('#side a.cur');
     if (act && !act.dataset.scrolled) { act.scrollIntoView({ block: 'nearest' }); act.dataset.scrolled = '1'; }

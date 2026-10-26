@@ -123,7 +123,8 @@ RS.setups.lm1 = `slr_mod_freq1 <- lm(RTlexdec ~ WrittenFrequency, data = english
 
 RS.about = [
   '- **범위**: `baseline_data`의 wk2–8 스크립트(wk2_ggplot_intro, wk2_ggplot_ExerciseKey, wk3_Rproject, wk3_ggplot_practice, wk3 폴더, wk4_dplyr, wk5_1_tidyr와 Exercise key, wk5_2_stringr, wk6_data_manip_practice_key, wk7_linear reg intro와 key, wk8_linear reg intro_rmld_neut)와 실습·숙제 PDF(wk6 실습지, HW1)에 나온 것만 다뤄요. 개념만 있는 PDF(교재 장, 강의 슬라이드)는 코드를 읽는 데 필요한 만큼만 인용했어요. Practice에 꼭 필요한 몇 가지는 "Practice 도구 상자" 단원에 따로 모았어요.',
-  '- **wk7–8 (회귀)**: 모델과 `summary()` 출력 표를 한 줄씩 해석해요. 통계 설명은 표를 읽는 데 필요한 만큼만, 교재 RMLD 4장·7.4절의 용어에 맞췄어요. 스크립트 밖 내용은 "참고"로 표시했어요.',
+  '- **구성**: 단원은 기본 → wk2 … wk8 순서로 묶었고, 직접 풀어 채점받는 Practice·논문 그림·연습·숙제는 맨 아래 **실습**에 모았어요. 각 주의 마지막 레슨과 목차에 그 주 실습 바로가기가 있어요.',
+  '- **wk7–8 (회귀)**: 코드를 쓰는 게 아니라 `summary()` 출력 표를 **읽고 해석**하는 게 목적이에요. 스크립트에 처음 나오는 통계 함수는 따로 레슨으로 만들지 않고 상자 안 설명으로만 다뤘어요. 스크립트 밖 심화 내용은 넣지 않았어요.',
   '- **결과**: 설명 속 코드의 결과(출력·그림)는 모두 이 컴퓨터의 R 4.6.1 · ggplot2 4.0.3 · dplyr 1.2.1로 **실제로 실행한 것**이에요. 손으로 그린 예상 그림이 아니에요.',
   '- **직접 실행**: "▶ 직접 실행"과 연습장은 브라우저 안에서 도는 진짜 R(webR 0.6, ggplot2 4.0.3)을 써요. 처음 한 번은 수십 MB를 내려받아서 30초~1분쯤 걸려요.',
   '- **공유용 페이지**: [claude.ai/artifact/5Rqr8ZGt8H9wAuKejLNg29](https://claude.ai/artifact/5Rqr8ZGt8H9wAuKejLNg29) (이 도구의 읽기 전용판 — 링크로 공유 가능)',
