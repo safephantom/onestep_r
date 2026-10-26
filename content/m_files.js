@@ -159,6 +159,7 @@ glimpse(sibmerger)`, why: 'wk4 마지막 과제의 데이터예요. 열 이름�
         ] } },
         { code: `n_distinct(sibimit$Subject)
 unique(sibimit$Task)` },
+        '두 줄 모두 처음 보는 데이터의 값을 확인하는 도구예요 (2단원 [[b-unique|unique(), length(), n_distinct()]]에서 배운 것).\n- `n_distinct(sibimit$Subject)` → `56`: Subject 열에 **서로 다른 값**이 56개, 곧 참가자가 56명이에요. 행은 3,223개지만 한 참가자가 여러 행에 나오니, 사람 수는 이렇게 세요.\n- `unique(sibimit$Task)` → 중복을 없앤 **값 목록**: baseline, imit1, imit2, model. 위 표의 Task 값이 실제로 이 네 가지뿐인지 확인한 거예요.',
         '권설음(retro)은 치조음(alveo)보다 COG가 **낮아요** (혀를 말아 공명 공간이 커짐). Practice 3·4는 이 차이가 합류 여부·성별에 따라 어떻게 다른지 보는 그림이에요.',
       ],
       quiz: [
