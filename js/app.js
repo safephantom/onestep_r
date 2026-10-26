@@ -542,7 +542,7 @@
       fbSlot.appendChild(feedback(ok, ok ? q.why : (q.hint || '빨간 칸을 다시 보세요. 철자·대소문자·따옴표까지 R은 정확히 구분해요.'), extra));
       if (!ok) {
         fbSlot.appendChild(h('button', { class: 'linkbtn', onclick: () => {
-          inputs.forEach((inp, i) => { inp.value = asArr(q.ans[i])[0]; });
+          inputs.forEach((inp, i) => replaceText(inp, asArr(q.ans[i])[0]));
           checkBtn.click();
         } }, '정답 보기'));
       }
@@ -611,11 +611,24 @@
     requestAnimationFrame(() => autoGrow(ta));
     return ta;
   }
+  // 입력창 글자를 바꿀 때는 브라우저의 편집 명령을 써서 Ctrl+Z 기록에 남긴다.
+  // value를 직접 바꾸면 그때까지의 되돌리기 기록이 모두 사라진다.
   function insertAt(ta, text) {
-    const s = ta.selectionStart, e = ta.selectionEnd;
-    ta.value = ta.value.slice(0, s) + text + ta.value.slice(e);
-    ta.selectionStart = ta.selectionEnd = s + text.length;
-    ta.dispatchEvent(new Event('input'));
+    ta.focus();
+    if (!document.execCommand('insertText', false, text)) {
+      ta.setRangeText(text, ta.selectionStart, ta.selectionEnd, 'end');
+      ta.dispatchEvent(new Event('input'));
+    }
+  }
+  function replaceText(el, text) {
+    if (el.value === text) return;
+    el.focus();
+    el.select();
+    const ok = text ? document.execCommand('insertText', false, text) : document.execCommand('delete');
+    if (!ok || el.value !== text) {
+      el.value = text;
+      el.dispatchEvent(new Event('input'));
+    }
   }
   function autoGrow(ta) {
     ta.style.height = 'auto';
@@ -682,7 +695,7 @@
     const solBox = h('div', { class: 'sol', hidden: true });
     card.appendChild(h('div', { class: 'row' },
       runBtn,
-      h('button', { class: 'btn ghost', onclick: () => { ta.value = q.starter || ''; P.code[q.id] = ta.value; save(); autoGrow(ta); } }, '처음으로'),
+      h('button', { class: 'btn ghost', title: '시작 코드로 되돌려요. Ctrl+Z를 누르면 쓰던 코드가 돌아와요.', onclick: () => replaceText(ta, q.starter || '') }, '처음으로'),
       q.sol ? h('button', { class: 'btn ghost', onclick: () => {
         if (!solBox.hidden) { solBox.hidden = true; return; }
         if (!solved && !confirm('모범 답안을 볼까요? 스스로 먼저 끝까지 해 보는 걸 권해요.')) return;
@@ -1079,11 +1092,7 @@
     panel.hidden = false;
     document.body.classList.add('play-open');
     if (code != null) {
-      const ta = $('#playEd');
-      ta.value = code;
-      P.play = code;
-      save();
-      autoGrow(ta);
+      replaceText($('#playEd'), code);
       playSetup = setup || [];
       $('#playSetup').textContent = playSetup.length ? '준비 코드 함께 실행: ' + playSetup.join(', ') : '';
     }
